@@ -78,3 +78,20 @@ def get_graded_list():
         grade_dict['E'] = e_ordered
 
     return grade_dict
+
+
+def get_player_grade(player):
+    grade_dict = get_graded_list()
+
+    if player.full_name_lastfirst in grade_dict['A']:
+        return 'A'
+    elif player.full_name_lastfirst in grade_dict['B']:
+        return 'B'
+    elif player.full_name_lastfirst in grade_dict['C']:
+        return 'C'
+    elif ('D' in grade_dict) and (player.full_name_lastfirst in grade_dict['D']):
+        return 'D'
+    elif ('E' in grade_dict) and (player.full_name_lastfirst in grade_dict['E']):
+        return 'E'
+    else:
+        return 'F'

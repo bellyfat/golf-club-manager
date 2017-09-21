@@ -44,7 +44,9 @@ class Game(models.Model):
 class GameScore(models.Model):
     player = models.ForeignKey('Player')
     game = models.ForeignKey('Game')
-    score = models.IntegerField()
+    score = models.IntegerField(null=True)
+    grade = models.CharField(max_length=1, null=True)
+    points = models.IntegerField(null=True)
 
     def __str__(self):
         return "%s - %s - %s" % (self.player, self.game, self.score)

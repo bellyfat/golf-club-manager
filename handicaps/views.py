@@ -11,7 +11,7 @@ from .models import Player, GameType, GameScore, Game, Grade
 from .forms import NewGameTypeForm, NewPlayerForm, NewGameForm, \
     NewGameScoreForm, EditPlayerForm, GradeForm
 from .calculator import handicap_calculator
-from .grade import get_graded_list
+from .grade import get_graded_list, get_player_grade
 
 
 @login_required
@@ -40,7 +40,6 @@ def game(request):
 
             # Save the data for each player and score in the formset
             new_scores = []
-            update_players = []
 
             for score_form in score_formset:
                 player = score_form.cleaned_data.get('player')
@@ -50,8 +49,17 @@ def game(request):
                     if score == 0:
                         break
                     else:
-                        new_scores.append(GameScore(player=player,
-                            game=game, score=score))
+                        current_grade = get_player_grade(player)
+
+                        new_scores.append(
+                            GameScore(
+                                player=player,
+                                game=game,
+                                score=score,
+                                grade=current_grade,
+                                points=1
+                            )
+                        )
 
                         # Get new handicap values
                         calc_result = handicap_calculator(player, score,
