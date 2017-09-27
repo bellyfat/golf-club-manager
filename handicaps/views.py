@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.forms import formset_factory
 from django.db import IntegrityError, transaction
+from operator import itemgetter
 
 
 from .models import Player, GameType, GameScore, Game, Grade
@@ -40,6 +41,11 @@ def game(request):
 
             # Save the data for each player and score in the formset
             new_scores = []
+            grade_a_scores = []
+            grade_b_scores = []
+            grade_c_scores = []
+            grade_d_scores = []
+            grade_e_scores = []
 
             for score_form in score_formset:
                 player = score_form.cleaned_data.get('player')
@@ -50,6 +56,17 @@ def game(request):
                         break
                     else:
                         current_grade = get_player_grade(player)
+
+                        if current_grade == "A":
+                            grade_a_scores.append((player, score))
+                        elif current_grade == "B":
+                            grade_b_scores.append((player, score))
+                        elif current_grade == "C":
+                            grade_c_scores.append((player, score))
+                        elif current_grade == "D":
+                            grade_d_scores.append((player, score))
+                        elif current_grade == "E":
+                            grade_e_scores.append((player, score))
 
                         new_scores.append(
                             GameScore(
@@ -70,6 +87,18 @@ def game(request):
                         player.latest_game = game.game_date
 
                         player.save()
+
+            grade_a_places = sorted(grade_a_scores, key=itemgetter(1))
+            grade_b_places = sorted(grade_b_scores, key=itemgetter(1))
+            grade_c_places = sorted(grade_c_scores, key=itemgetter(1))
+            for item in grade_a_places:
+                print(f"Grade A: {item[0]}: {item[1]}")
+
+            for item in grade_b_places:
+                print(f"Grade B: {item[0]}: {item[1]}")
+
+            for item in grade_c_places:
+                print(f"Grade C: {item[0]}: {item[1]}")
 
             try:
                 with transaction.atomic():

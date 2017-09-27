@@ -2,7 +2,7 @@
 # additional attendance points
 import collections
 
-from .models import Grade, Player
+from .models import Grade, Player, GameType
 
 
 def get_graded_list():

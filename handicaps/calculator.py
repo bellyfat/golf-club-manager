@@ -5,7 +5,7 @@ from .models import Player, Game, GameType, GameScore
 def handicap_calculator(player, score, gametype):
     # Initialize values
     handicap = player.handicap
-    
+
     if score >= gametype.level_4:
         # Checks if the handicap should be increased or decreased to ensure
         # that the updated handicap never exceeds 44.5
@@ -28,7 +28,7 @@ def handicap_calculator(player, score, gametype):
                 new_handicap = handicap + gametype.level_1_result
         else:
             new_handicap = handicap + gametype.level_1_result
-    
+
     handicap_change = new_handicap - handicap
-    
+
     return new_handicap, handicap_change
